@@ -1,2 +1,2 @@
-const logMessage = msg => console.log(msg)
+const logMessage = msg => console.log("MSG:"+msg)
 export default logMessage
