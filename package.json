@@ -1,0 +1,22 @@
+{
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "name": "MultiplayerRacer",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "webpack --mode development",
+    "start": "node ./dist/server.js"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.15.5",
+    "@babel/preset-env": "^7.15.6",
+    "babel-loader": "^8.2.2",
+    "html-loader": "^1.3.2",
+    "html-webpack-plugin": "^4.5.2",
+    "webpack": "^4.2.6",
+    "webpack-cli": "^4.8.0",
+    "webpack-node-externals": "^3.0.0",
+    "webpack-plugin": "^1.0.5"
+  }
+}
