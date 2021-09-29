@@ -1,6 +1,9 @@
 const path = require('path')
 const webpack = require('webpack')
 const nodeExternals = require('webpack-node-externals')
+const HtmlWebPackPlugin = require('html-webpack-plugin')
+
+
 module.exports = (env, argv) => {
   const SERVER_PATH = (argv.mode === 'production') ?
     './src/server/server-prod.js' :
@@ -8,6 +11,7 @@ module.exports = (env, argv) => {
 return ({
     entry: {
       server: SERVER_PATH,
+      serverGame: ['webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000', './src/index.js']
     },
     output: {
       path: path.join(__dirname, 'dist'),
@@ -30,8 +34,35 @@ return ({
           use: {
             loader: "babel-loader"
           }
-        }
+        },
+        {
+        // Loads the javacript into html template provided.
+        // Entry point is set below in HtmlWebPackPlugin in Plugins 
+        test: /\.html$/,
+        use: [
+          {
+            loader: "html-loader",
+            //options: { minimize: true }
+          }
+        ]
+      },
+      { 
+        test: /\.css$/,
+        use: [ 'style-loader', 'css-loader' ]
+      },
+      {
+       test: /\.(png|svg|jpg|gif)$/,
+       use: ['file-loader']
+      }
       ]
-    }
+    },
+    plugins: [
+    new HtmlWebPackPlugin({
+      template: "./src/html/index.html",
+      filename: "./auth_server.html",
+      chunks:["serverGame"],
+      excludeChunks: [ 'server' ]
+    }),
+    ]
   })
 }
