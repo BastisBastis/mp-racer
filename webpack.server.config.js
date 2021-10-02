@@ -11,7 +11,7 @@ module.exports = (env, argv) => {
 return ({
     entry: {
       server: SERVER_PATH,
-      serverGame: ['webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000', './src/index.js']
+      ServerGame: ['webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000', './src/ServerGame.js']
     },
     output: {
       path: path.join(__dirname, 'dist'),
@@ -56,13 +56,13 @@ return ({
       }
       ]
     },
-    plugins: [
+    plugins: [/*
     new HtmlWebPackPlugin({
       template: "./src/html/index.html",
       filename: "./auth_server.html",
-      chunks:["serverGame"],
+      //chunks:["ServerGame"],
       excludeChunks: [ 'server' ]
-    }),
+    })*/
     ]
   })
 }

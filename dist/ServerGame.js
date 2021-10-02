@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./src/server/server-dev.js");
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -107,18 +107,6 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 
 "use strict";
 eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return GameScene; });\n/* harmony import */ var phaser__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! phaser */ \"phaser\");\n/* harmony import */ var phaser__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(phaser__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _utils_Geckos__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utils/Geckos */ \"./src/utils/Geckos.js\");\nfunction _typeof(obj) { \"@babel/helpers - typeof\"; if (typeof Symbol === \"function\" && typeof Symbol.iterator === \"symbol\") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === \"function\" && obj.constructor === Symbol && obj !== Symbol.prototype ? \"symbol\" : typeof obj; }; } return _typeof(obj); }\n\nfunction _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }\n\nfunction _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\"value\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }\n\nfunction _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }\n\nfunction _inherits(subClass, superClass) { if (typeof superClass !== \"function\" && superClass !== null) { throw new TypeError(\"Super expression must either be null or a function\"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }\n\nfunction _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }\n\nfunction _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }\n\nfunction _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === \"object\" || typeof call === \"function\")) { return call; } else if (call !== void 0) { throw new TypeError(\"Derived constructors may only return object or undefined\"); } return _assertThisInitialized(self); }\n\nfunction _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError(\"this hasn't been initialised - super() hasn't been called\"); } return self; }\n\nfunction _isNativeReflectConstruct() { if (typeof Reflect === \"undefined\" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === \"function\") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }\n\nfunction _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }\n\n\n\n\nvar GameScene = /*#__PURE__*/function (_Phaser$Scene) {\n  _inherits(GameScene, _Phaser$Scene);\n\n  var _super = _createSuper(GameScene);\n\n  function GameScene() {\n    _classCallCheck(this, GameScene);\n\n    return _super.call(this, {\n      key: \"GameScene\"\n    });\n  }\n\n  _createClass(GameScene, [{\n    key: \"preload\",\n    value: function preload() {}\n  }, {\n    key: \"create\",\n    value: function create() {\n      console.log(\"Server game created\");\n    }\n  }]);\n\n  return GameScene;\n}(phaser__WEBPACK_IMPORTED_MODULE_0___default.a.Scene);\n\n\n\n//# sourceURL=webpack:///./src/auth_server/scenes/GameScene.js?");
-
-/***/ }),
-
-/***/ "./src/server/server-dev.js":
-/*!**********************************!*\
-  !*** ./src/server/server-dev.js ***!
-  \**********************************/
-/*! no exports provided */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! path */ \"path\");\n/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! express */ \"express\");\n/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(express__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var webpack__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! webpack */ \"webpack\");\n/* harmony import */ var webpack__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(webpack__WEBPACK_IMPORTED_MODULE_2__);\n/* harmony import */ var webpack_dev_middleware__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! webpack-dev-middleware */ \"webpack-dev-middleware\");\n/* harmony import */ var webpack_dev_middleware__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(webpack_dev_middleware__WEBPACK_IMPORTED_MODULE_3__);\n/* harmony import */ var webpack_hot_middleware__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! webpack-hot-middleware */ \"webpack-hot-middleware\");\n/* harmony import */ var webpack_hot_middleware__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(webpack_hot_middleware__WEBPACK_IMPORTED_MODULE_4__);\n/* harmony import */ var _webpack_dev_config_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../webpack.dev.config.js */ \"./webpack.dev.config.js\");\n/* harmony import */ var _webpack_dev_config_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_webpack_dev_config_js__WEBPACK_IMPORTED_MODULE_5__);\n/* harmony import */ var jsdom__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! jsdom */ \"jsdom\");\n/* harmony import */ var jsdom__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(jsdom__WEBPACK_IMPORTED_MODULE_6__);\n/* harmony import */ var canvas_mock__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! canvas-mock */ \"canvas-mock\");\n/* harmony import */ var canvas_mock__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(canvas_mock__WEBPACK_IMPORTED_MODULE_7__);\n/* harmony import */ var _ServerGame__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../ServerGame */ \"./src/ServerGame.js\");\n\n\n\n\n\n\n\n\n\nvar app = express__WEBPACK_IMPORTED_MODULE_1___default()(),\n    DIST_DIR = __dirname,\n    HTML_FILE = path__WEBPACK_IMPORTED_MODULE_0___default.a.join(DIST_DIR, 'index.html'),\n    compiler = webpack__WEBPACK_IMPORTED_MODULE_2___default()(_webpack_dev_config_js__WEBPACK_IMPORTED_MODULE_5___default.a);\napp.use(webpack_dev_middleware__WEBPACK_IMPORTED_MODULE_3___default()(compiler, {\n  publicPath: _webpack_dev_config_js__WEBPACK_IMPORTED_MODULE_5___default.a.output.publicPath\n}));\napp.use(webpack_hot_middleware__WEBPACK_IMPORTED_MODULE_4___default()(compiler));\napp.get('*', function (req, res, next) {\n  compiler.outputFileSystem.readFile(HTML_FILE, function (err, result) {\n    if (err) {\n      return next(err);\n    }\n\n    res.set('content-type', 'text/html');\n    res.send(result);\n    res.end();\n  });\n});\n/*\nconst {JSDOM} = jsdom;\nconst virtualConsole = new jsdom.VirtualConsole();\nvirtualConsole.sendTo(console);\nvirtualConsole.on(\"error\", (err) => { console.log(err) });\n\nconst PORT = process.env.PORT || 8080\napp.listen(PORT, () => {\n    console.log(`App listening to ${PORT}.....`)\n    console.log('Press Ctrl+C to quit.')\n})\n\nconst pth = (path.join(__dirname, 'index.html'));\n*/\n\nfunction setupAuthoritativePhaser() {\n  console.log(1);\n\n  try {\n    /*\n    //console.log(canvasMockify)\n    \n    const dom = new JSDOM(`<body>\n    <script>console.log('hopp')</script>\n    </body>`, { \n    // To run the scripts in the html file\n    runScripts: \"dangerously\",\n    // Also load supported external resources\n    resources: \"usable\",\n    // So requestAnimatinFrame events fire\n    pretendToBeVisual: true,\n    virtualConsole: virtualConsole,\n    });\n    */\n    //console.log(dom.window.document.body.innerHTML)\n    //file://${__dirname}/ServerGame.js\n\n    /*\n    JSDOM.fromFile(pth, {\n      // To run the scripts in the html file\n      runScripts: \"dangerously\",\n      // Also load supported external resources\n      resources: \"usable\",\n      // So requestAnimatinFrame events fire\n      pretendToBeVisual: true,\n      virtualConsole: virtualConsole,\n      \n    }).then(dom=>{\n      dom.window.document.body.innerHTML+=`<script src=\"file://${__dirname}/ServerGame.js\"></script>`;\n      dom.window.eval(`tst()`);\n      console.log(\"hipp\")\n      console.log(dom.window.document.body.innerHTML)\n    }).catch(err=>{\n      console.log(err);\n    });\n    \n    */\n    var serverGame = new _ServerGame__WEBPACK_IMPORTED_MODULE_8__[\"default\"](app);\n  } catch (err) {\n    console.log(err);\n  }\n\n  console.log(2);\n}\n\nsetTimeout(setupAuthoritativePhaser, 2000);\n\n//# sourceURL=webpack:///./src/server/server-dev.js?");
 
 /***/ }),
 
@@ -158,14 +146,14 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 
 /***/ }),
 
-/***/ "./webpack.dev.config.js":
-/*!*******************************!*\
-  !*** ./webpack.dev.config.js ***!
-  \*******************************/
+/***/ 0:
+/*!*************************************************************************************************!*\
+  !*** multi webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000 ./src/ServerGame.js ***!
+  \*************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("var path = __webpack_require__(/*! path */ \"path\");\n\nvar webpack = __webpack_require__(/*! webpack */ \"webpack\");\n\nvar HtmlWebPackPlugin = __webpack_require__(/*! html-webpack-plugin */ \"html-webpack-plugin\");\n\nmodule.exports = {\n  entry: {\n    main: ['webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000', './src/index.js']\n  },\n  output: {\n    path: path.join(__dirname, 'dist'),\n    publicPath: '/',\n    filename: '[name].js'\n  },\n  mode: 'development',\n  target: 'web',\n  devtool: 'source-map',\n  module: {\n    rules: [{\n      test: /\\.js$/,\n      exclude: /node_modules/,\n      loader: \"babel-loader\"\n    }, {\n      // Loads the javacript into html template provided.\n      // Entry point is set below in HtmlWebPackPlugin in Plugins \n      test: /\\.html$/,\n      use: [{\n        loader: \"html-loader\" //options: { minimize: true }\n\n      }]\n    }, {\n      test: /\\.css$/,\n      use: ['style-loader', 'css-loader']\n    }, {\n      test: /\\.(png|svg|jpg|gif)$/,\n      use: ['file-loader']\n    }]\n  },\n  plugins: [new HtmlWebPackPlugin({\n    template: \"./src/html/index.html\",\n    filename: \"./index.html\",\n    chunks: [\"index\"] //excludeChunks: [ 'server' , 'ServerGame']\n\n  }), new webpack.HotModuleReplacementPlugin(), new webpack.NoEmitOnErrorsPlugin(), new webpack.IgnorePlugin(/jsdom$/)]\n};\n\n//# sourceURL=webpack:///./webpack.dev.config.js?");
+eval("__webpack_require__(/*! webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000 */\"webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000\");\nmodule.exports = __webpack_require__(/*! ./src/ServerGame.js */\"./src/ServerGame.js\");\n\n\n//# sourceURL=webpack:///multi_webpack-hot-middleware/client?");
 
 /***/ }),
 
@@ -180,17 +168,6 @@ eval("module.exports = require(\"canvas-mock\");\n\n//# sourceURL=webpack:///ext
 
 /***/ }),
 
-/***/ "express":
-/*!**************************!*\
-  !*** external "express" ***!
-  \**************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("module.exports = require(\"express\");\n\n//# sourceURL=webpack:///external_%22express%22?");
-
-/***/ }),
-
 /***/ "fs":
 /*!*********************!*\
   !*** external "fs" ***!
@@ -199,17 +176,6 @@ eval("module.exports = require(\"express\");\n\n//# sourceURL=webpack:///externa
 /***/ (function(module, exports) {
 
 eval("module.exports = require(\"fs\");\n\n//# sourceURL=webpack:///external_%22fs%22?");
-
-/***/ }),
-
-/***/ "html-webpack-plugin":
-/*!**************************************!*\
-  !*** external "html-webpack-plugin" ***!
-  \**************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("module.exports = require(\"html-webpack-plugin\");\n\n//# sourceURL=webpack:///external_%22html-webpack-plugin%22?");
 
 /***/ }),
 
@@ -246,36 +212,14 @@ eval("module.exports = require(\"phaser\");\n\n//# sourceURL=webpack:///external
 
 /***/ }),
 
-/***/ "webpack":
-/*!**************************!*\
-  !*** external "webpack" ***!
-  \**************************/
+/***/ "webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000":
+/*!**********************************************************************************!*\
+  !*** external "webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000" ***!
+  \**********************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("module.exports = require(\"webpack\");\n\n//# sourceURL=webpack:///external_%22webpack%22?");
-
-/***/ }),
-
-/***/ "webpack-dev-middleware":
-/*!*****************************************!*\
-  !*** external "webpack-dev-middleware" ***!
-  \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("module.exports = require(\"webpack-dev-middleware\");\n\n//# sourceURL=webpack:///external_%22webpack-dev-middleware%22?");
-
-/***/ }),
-
-/***/ "webpack-hot-middleware":
-/*!*****************************************!*\
-  !*** external "webpack-hot-middleware" ***!
-  \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("module.exports = require(\"webpack-hot-middleware\");\n\n//# sourceURL=webpack:///external_%22webpack-hot-middleware%22?");
+eval("module.exports = require(\"webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000\");\n\n//# sourceURL=webpack:///external_%22webpack-hot-middleware/client?");
 
 /***/ })
 

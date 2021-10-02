@@ -3,7 +3,7 @@ const webpack = require('webpack')
 const HtmlWebPackPlugin = require('html-webpack-plugin')
 module.exports = {
   entry: {
-    main: ['webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000', './src/index.js']
+    main: ['webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000', './src/index.js'],
   },
   output: {
     path: path.join(__dirname, 'dist'),
@@ -45,9 +45,12 @@ module.exports = {
     new HtmlWebPackPlugin({
       template: "./src/html/index.html",
       filename: "./index.html",
-      excludeChunks: [ 'server' ]
+      chunks: ["index"],
+      //excludeChunks: [ 'server' , 'ServerGame']
     }),
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin()
+    new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.IgnorePlugin(/jsdom$/)
+    
   ]
 }
