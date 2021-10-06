@@ -1,7 +1,8 @@
 import "./utils/Geckos"
 import Phaser from "phaser"
 import GameScene from "./auth_server/scenes/GameScene"
-
+import MockTextureManager from './auth_server/phaserFix/MockTextureManager'
+import MockMatterImage from './auth_server/phaserFix/MockMatterImage'
 
 const config = {
   type: Phaser.HEADLESS,
@@ -10,10 +11,10 @@ const config = {
   height: 600,
   autoFocus: false,
   physics: {
-    default: 'arcade',
-    arcade: {
+    default: 'matter',
+    matter: {
       debug: false,
-      gravity: { y: 0 }
+      //gravity: { y: 0 }
     }
   },
   scene: [
@@ -38,22 +39,6 @@ const config = {
 }
 */
 
-const bootScene = {
-    key: 'boot',
-    active: true,
-    init: () => {
-        console.log('[BOOT] init');
-    },
-    preload: () => {
-        console.log('[BOOT] preload');
-    },
-    create: () => {
-        console.log('[BOOT] create');
-    },
-    update: () => {
-        console.log('[BOOT] update');
-    }
-};
 
 //const serverGame = new Phaser.Game(config);
 
@@ -99,6 +84,14 @@ export default class PhaserGame extends Phaser.Game {
     super(config)
     this.server = server
     //console.log(this.scene)
-    this.start()
+    this.textures= new MockTextureManager(this);
+    //this.boot();
+    //this.events.emit("boot");
+  }
+  
+  boot() {
+    super.boot();
+    this.events.emit("ready");
+    this.start();
   }
 }

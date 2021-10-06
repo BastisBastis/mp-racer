@@ -6,6 +6,9 @@ import NPC from "../objects/NPC"
 import Map from "../objects/Map"
 import Player from "../objects/Player";
 
+//tmp
+import Car from "../objects/Car"
+
 export default class Game extends Phaser.Scene {
   constructor () {
       super({key:"Game"});
@@ -23,32 +26,40 @@ export default class Game extends Phaser.Scene {
     
     const demo=true;
 
-    //this.demo=true;
+    this.demo=true;
     
-    
+    //this.car= new Car(this,0xff0000,50,50,0,"Red")
 
 
     //World stuff
     this.matter.world.disableGravity();
-
+    
+    
     const mapIndex = data.mapIndex ||0;
     this.mapIndex=mapIndex;
     this.map=Map.mapWithIndex(this,mapIndex);
     
     this.road = this.map.road;
     
+    
+    
+    
     const playerName = data.name || "Red";
     
+    
     this.player = new Player(this, 0xff0000, 100,230,0,playerName);
+    
     if (this.demo) {
       this.player.shouldAutoDrive=true;
     }
     
     this.map.addCar(this.player);
+    
     this.opponents = [];
+    
     const opponentColors=[0xffff00, 0x00ff00, 0x0000ff,0xff00ff,0x00ffff];
     const opponentNames=["Yellow","Green","Blue","Purple","Cyan"]
-    for (let i=0; i<5;i++) {
+    for (let i=0; i<0;i++) {
       const car = new NPC(this, opponentColors[i], 0,0,i+1,opponentNames[i])
       this.map.addCar(car);
       this.player.addOpponent(car);
@@ -67,14 +78,20 @@ export default class Game extends Phaser.Scene {
 
     this.countdown=5;
 
+    
+    
     if (this.demo) {
       this.startRace()
     } else {
       this.proceedCountdown();
     }
     
+    this.debugCounterMax=50;
+    this.debugCounter=this.debugCounterMax+1
+    
+    
     } catch (err) {
-      alert(err)
+      console.log(err)
     }
   }
   
@@ -106,7 +123,7 @@ export default class Game extends Phaser.Scene {
     this.raceActive=true;
     this.raceStarted=true;
     this.startTime=this.time.now;
-    this.player.start(this.startTime);
+    //this.player.start(this.startTime);
     for (const opp of this.opponents) {
       opp.start(this.startTime)
     }
@@ -149,8 +166,19 @@ export default class Game extends Phaser.Scene {
   
 
   update(time,delta) {
+    try {
+    //console.log(this)
     
+    //this.player.accelerate(1)
+    if (this.debugCounter>this.debugCounterMax) {
+      console.log("first update")
+    }
+    this.debugCounter--;
     
+    if (this.debugCounter<0)
+      this.player.test()
+    
+    this.debugCounter=this.debugCounter<0?this.debugCounterMax:this.debugCounter;
     
     
     let raceOver=true;
@@ -181,6 +209,11 @@ export default class Game extends Phaser.Scene {
       
       //const lapElapsed = time-this.player.lapStartTime;
       //this.lapTimeLabel.text = this.msToString(lapElapsed);
+    }
+    
+    }
+    catch (err) {
+      console.log(err)
     }
   }
 }

@@ -45,8 +45,8 @@ module.exports = {
     new HtmlWebPackPlugin({
       template: "./src/html/index.html",
       filename: "./index.html",
-      chunks: ["index"],
-      //excludeChunks: [ 'server' , 'ServerGame']
+      //chunks: ["index"],
+      excludeChunks: [ 'server' , 'ServerGame']
     }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),

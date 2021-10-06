@@ -1,5 +1,8 @@
 import Phaser from "phaser"
+import MockMatterImage from '../phaserFix/MockMatterImage'
 //import Road from "./Road"
+
+let f=true;
 
 function foot(A, B, P) {
   const AB = {
@@ -14,23 +17,27 @@ function foot(A, B, P) {
 }
 
 const distance = (a,b) => {
+  
   return Math.sqrt((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y));
 }
 
-export default class Car extends Phaser.Physics.Matter.Sprite {
+export default class Car extends MockMatterImage {  //Phaser.Physics.Matter.Image {
   
   constructor(scene,color,x,y,id,name) {
-    super(scene.matter.world,x,y,"car");
+    super(scene.matter.world,x,y,"");
     
     this.scene=scene;
     
     this.name=name;
     this.id=id;
-    this.color=color
     
-    this.setAlpha=0;
-    this.setScale(0.125);
+    //this.setTint(color);
+    //this.setScale(0.125);
     this.setOrigin(0.25,0.5);
+    
+    //this.body = scene.matter.add.rectangle(x,y,16,32)
+    
+    this.setSize(16, 32)
     this.body.position.x-=this.width*0.0625/2
     this.body.positionPrev.x-=this.width*0.0625/2
     
@@ -43,8 +50,10 @@ export default class Car extends Phaser.Physics.Matter.Sprite {
     
     //this.airFric=0.05;
     this.airFric=0.045;
-    this.setFrictionAir(0.05);
+    this.frictionAir=0.05;
     //this.setMass(10);
+    
+    
     this.setCollisionGroup(1);
     this.setCollidesWith([0,1,3,4]);
     this.checkpointsPassed=-1;
@@ -61,8 +70,8 @@ export default class Car extends Phaser.Physics.Matter.Sprite {
     
     this.closestNavPoint;
     
-    
-    scene.add.existing(this);
+    //console.log(this.width)
+    //scene.add.existing(this);
     
     
   }
@@ -110,7 +119,7 @@ export default class Car extends Phaser.Physics.Matter.Sprite {
     this.navPoints=navPoints;
     this.findClosestNavPoint(-1);
     this.optimalPath=optimalPath
-    //console.log(optimalPath)
+    
   }
   
   passCheckpoint(i,checkpointCount, time) {
@@ -142,6 +151,11 @@ export default class Car extends Phaser.Physics.Matter.Sprite {
     }
   }
   
+  test() {
+    this.accelerate(0.1)
+    console.log(this.x)
+  }
+  
   start(time) {
     
     this.startTime=time;
@@ -161,7 +175,6 @@ export default class Car extends Phaser.Physics.Matter.Sprite {
     const toPoint = range<0 ? this.navPoints[0].length : this.closestNavPoint.pointIndex+range;
     
     
-    
     for (const pathIndex in this.navPoints) {
       const path = this.navPoints[pathIndex];
       for (let pointIndex = fromPoint; pointIndex < toPoint; pointIndex++) {
@@ -171,7 +184,10 @@ export default class Car extends Phaser.Physics.Matter.Sprite {
         
         const point = path[calculatedPointIndex];
         const dist = distance(this,point);
-        if (dist <=closestPoint.dist) {
+        
+        
+        if (Number(dist) <=closestPoint.dist) {
+          
           closestPoint={
             pathIndex:pathIndex,
             pointIndex:calculatedPointIndex,
@@ -182,15 +198,18 @@ export default class Car extends Phaser.Physics.Matter.Sprite {
     }
     //this.scene.printText(closestPoint.pointIndex)
     this.closestNavPoint=closestPoint;
+    //console.log(closestPoint)
   }
   
   updateRoadPosition() {
-    
-    
+    //console.log("urp")
+    //console.log(this.x)
     const p = {x:this.x,y:this.y};
+    
     const v = this.navPoints[0][this.closestNavPoint.pointIndex];
     
     const w = this.navPoints[2][this.closestNavPoint.pointIndex];
+    //console.log(this.navPoints[0])
     
     const newPoint = foot(v,w,p);
     

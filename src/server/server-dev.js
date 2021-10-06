@@ -27,17 +27,19 @@ app.get('*', (req, res, next) => {
   })
 })
 
+const PORT = process.env.PORT || 8080
+app.listen(PORT, () => {
+    console.log(`App listening to ${PORT}.....`)
+    console.log('Press Ctrl+C to quit.')
+})
+
 /*
 const {JSDOM} = jsdom;
 const virtualConsole = new jsdom.VirtualConsole();
 virtualConsole.sendTo(console);
 virtualConsole.on("error", (err) => { console.log(err) });
 
-const PORT = process.env.PORT || 8080
-app.listen(PORT, () => {
-    console.log(`App listening to ${PORT}.....`)
-    console.log('Press Ctrl+C to quit.')
-})
+
 
 const pth = (path.join(__dirname, 'index.html'));
 */
