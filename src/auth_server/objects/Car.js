@@ -152,7 +152,7 @@ export default class Car extends MockMatterImage {  //Phaser.Physics.Matter.Imag
   }
   
   test() {
-    this.accelerate(0.1)
+    //this.accelerate(0.1)
     console.log(this.x)
   }
   

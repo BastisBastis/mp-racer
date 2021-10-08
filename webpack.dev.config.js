@@ -12,6 +12,7 @@ module.exports = {
   },
   mode: 'development',
   target: 'web',
+  /*node:{fs:'empty'},*/
   devtool: 'source-map',
   module: {
     rules: [
@@ -52,5 +53,10 @@ module.exports = {
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.IgnorePlugin(/jsdom$/)
     
-  ]
+  ],
+  /*
+  externals: {
+      bufferutil: "bufferutil",
+      "utf-8-validate": "utf-8-validate", "supports-color":"supports-color",
+    } */
 }

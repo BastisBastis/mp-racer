@@ -6,6 +6,7 @@ import NPC from "../objects/NPC"
 import Map from "../objects/Map"
 import Player from "../objects/Player";
 
+
 //tmp
 import Car from "../objects/Car"
 
@@ -19,14 +20,15 @@ export default class Game extends Phaser.Scene {
   }
     
   create (data) {
+    
     try {
     
     this.demo = data.demo;
   
     
-    const demo=true;
+    //this.demo=true;
 
-    this.demo=true;
+    //this.demo=true;
     
     //this.car= new Car(this,0xff0000,50,50,0,"Red")
 
@@ -78,6 +80,14 @@ export default class Game extends Phaser.Scene {
 
     this.countdown=5;
 
+    this.game.io.on("connection",socket=>{
+      this.game.sockets.push(socket);
+      console.log("New connection")
+      
+      socket.on("playerUpdate",data=>this.playerUpdate(data))
+      
+    })
+    
     
     
     if (this.demo) {
@@ -86,8 +96,10 @@ export default class Game extends Phaser.Scene {
       this.proceedCountdown();
     }
     
-    this.debugCounterMax=50;
-    this.debugCounter=this.debugCounterMax+1
+    this.debugCounterMax=1000;
+    this.debugCounter=this.debugCounterMax+1;
+    this.updates=0;
+    this.playerUpdates=0
     
     
     } catch (err) {
@@ -163,20 +175,29 @@ export default class Game extends Phaser.Scene {
   }
 
   
-  
+  playerUpdate(data) {
+    this.playerUpdates++
+    //this.player.turn(data.turnAmount);
+    this.player.accelerate(data.acc);
+  }
 
   update(time,delta) {
     try {
+      this.updates++;
     //console.log(this)
     
     //this.player.accelerate(1)
     if (this.debugCounter>this.debugCounterMax) {
-      console.log("first update")
+      //console.log("first update")
     }
-    this.debugCounter--;
+    this.debugCounter-=delta;
     
-    if (this.debugCounter<0)
-      this.player.test()
+    if (this.debugCounter<0) {
+      //this.player.test()
+      console.log(this.updates,this.playerUpdates)
+      this.updates=0;
+      this.playerUpdates=0;
+    }
     
     this.debugCounter=this.debugCounter<0?this.debugCounterMax:this.debugCounter;
     
@@ -210,6 +231,9 @@ export default class Game extends Phaser.Scene {
       //const lapElapsed = time-this.player.lapStartTime;
       //this.lapTimeLabel.text = this.msToString(lapElapsed);
     }
+    
+    //this.game.io.emit("update",JSON.stringify({x:this.player.x,y:this.player.y}));
+    this.game.io.emit("update",{x:this.player.x,y:this.player.y,rot:this.player.rotation});
     
     }
     catch (err) {

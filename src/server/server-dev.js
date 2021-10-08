@@ -7,6 +7,14 @@ import config from '../../webpack.dev.config.js'
 import jsdom from "jsdom"
 import canvasMockify from "canvas-mock"
 import PhaserGame from '../ServerGame'
+import socket from 'socket.io'
+
+  
+/*var os = require('os');
+os.platform(); // 'darwin'
+os.release(); //'10.8.0'
+*/
+
 
 const app = express(),
             DIST_DIR = __dirname,
@@ -28,10 +36,33 @@ app.get('*', (req, res, next) => {
 })
 
 const PORT = process.env.PORT || 8080
-app.listen(PORT, () => {
+const server =app.listen(PORT, () => {
     console.log(`App listening to ${PORT}.....`)
     console.log('Press Ctrl+C to quit.')
 })
+
+const io = socket(server);
+
+
+  
+
+/*
+const io = geckos()
+
+io.listen(3000) // default port is 9208
+
+io.onConnection(channel => {
+  channel.onDisconnect(() => {
+    console.log(`${channel.id} got disconnected`)
+  })
+
+  channel.on('chat message', data => {
+    console.log(`got ${data} from "chat message"`)
+    // emit the "chat message" data to all channels in the same room
+    io.room(channel.roomId).emit('chat message', data)
+  })
+})
+*/
 
 /*
 const {JSDOM} = jsdom;
@@ -44,8 +75,9 @@ virtualConsole.on("error", (err) => { console.log(err) });
 const pth = (path.join(__dirname, 'index.html'));
 */
 
-function setupAuthoritativePhaser() {
-  console.log(1)
+//function setupAuthoritativePhaser() {
+  //console.log(1)
+
   
   try {
     /*
@@ -86,14 +118,14 @@ function setupAuthoritativePhaser() {
   });
   
   */
-  const serverGame = new PhaserGame(app);
+  const serverGame = new PhaserGame(io);
   
   
   } catch (err) {
     console.log(err)
   }
   
-  console.log(2)
+  //console.log(2)
   
-}
-setTimeout(setupAuthoritativePhaser,2000);
+//}
+//setTimeout(setupAuthoritativePhaser,100);

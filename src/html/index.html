@@ -1,14 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html>
+  <head>
     <meta charset="utf-8">
-    <title>Express and Webpack App</title>
-    <link rel="shortcut icon" href="#">
-</head>
-<body>
-    <h1>Expack</h1>
-    <p class="description">Express and Webpack Boilerplate App</p>
-    <div class="awful-selfie"></div>
-    <script>console.log("bam")</script>
-</body>
+    <meta name="viewport" 
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <style>
+      body {
+        margin:0;
+        padding:0;
+      }
+      #c {
+        
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="c" style="
+      width:100%;
+      position:absolute;
+      top:0;
+      left:0;
+      z-index:-1;
+      "></canvas>
+    <div id="phaserContainer" style="
+      width:100%;
+      position:absolute;
+      top:0;
+      left:0;
+     
+    "></div>
+    <input 
+      type='text' 
+      id='textInput' 
+      autocomplete="off" 
+      autocorrect="off" 
+      autocapitalize="on" 
+      spellcheck="false"
+      style='
+        position:absolute; 
+        z-index:1;
+        border-radius:0;
+        border: 5px solid #878787;
+        background:#ffffff87;
+        display:none;
+      ' />
+  </body>
 </html>

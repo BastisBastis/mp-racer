@@ -1,16 +1,17 @@
 import Phaser from 'phaser';
 import GameScene from "./client/scenes/GameScene"
-/*import RaceOver from "./scenes/RaceOver"
-import UI from "./scenes/UI"
-import Menu from "./scenes/Menu"
-*/
+
+import RaceOver from "./client/scenes/RaceOver"
+import UI from "./client/scenes/UI"
+import Menu from "./client/scenes/Menu"
+
 
 const config = {
     type: Phaser.AUTO,
     parent: 'phaserContainer',
     //width: 800,
     //height: 600,
-    //transparent:true,
+    transparent:true,
     
     scale: {
       parent: 'phaser-example',
@@ -28,10 +29,13 @@ const config = {
     scene: [
       //Menu,
       GameScene,
-      //RaceOver,
-      //UI
+      RaceOver,
+      UI
     ]
 };
+
+
+
 
 const thisgsme = new Phaser.Game(config);
 
