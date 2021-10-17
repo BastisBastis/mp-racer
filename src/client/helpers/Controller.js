@@ -111,7 +111,7 @@ export default class Controller {
     
     const dRatio = delta*0.01;
     if (this.steeringTouch) {
-      this.player.accelerate(dRatio*this.steeringTouch.accelerate);
+      this.player.setThrottle(this.steeringTouch.accelerate);
       if (this.steeringTouch.accelerate<0) {
         this.player.turn(-this.steeringTouch.turn);
       }
@@ -119,11 +119,16 @@ export default class Controller {
         this.player.turn(this.steeringTouch.turn);
       }
       
-    } else {
+    }
+    else {
+      this.player.setThrottle(0)
+      this.player.turn(0)
+    }
+    
       if (this.keys.w.isDown) {
-        this.player.accelerate(dRatio);
+        this.player.setThrottle(dRatio);
       } else if (this.keys.s.isDown) {
-        this.player.accelerate(-dRatio);
+        this.player.setThrottle(-dRatio);
       }
       if (this.keys.a.isDown) {
         this.player.turn(-0.8);
@@ -131,7 +136,7 @@ export default class Controller {
       else if (this.keys.d.isDown) {
         this.player.turn(0.8);
       }
-    }
+    
     
     
   }

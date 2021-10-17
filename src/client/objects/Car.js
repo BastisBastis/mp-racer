@@ -1,6 +1,22 @@
 import Phaser from "phaser"
 //import Road from "./Road"
 
+const lerp= (orig,target, amt) =>{
+  try {                                         
+        if (amt > 1.0) {amt = 1.0};
+        orig.x += (target.x - orig.x) * amt;
+        orig.y += (target.y - orig.y) * amt;
+        } catch (err) { console.log(err) }
+        return orig;
+    };
+    
+const rLerp = (A, B, w) =>{
+    let CS = (1-w)*Math.cos(A) + w*Math.cos(B);
+    let SN = (1-w)*Math.sin(A) + w*Math.sin(B);
+    return Math.atan2(SN,CS);
+}
+
+
 function foot(A, B, P) {
   const AB = {
     x: B.x - A.x,
@@ -63,7 +79,7 @@ export default class Car extends Phaser.Physics.Matter.Sprite {
     
     
     scene.add.existing(this);
-    
+    this.updatedData=false;
     
   }
   
@@ -75,7 +91,7 @@ export default class Car extends Phaser.Physics.Matter.Sprite {
     
     const turnSpeed=this.turnFactor* Math.pow(this.getSpeed(),0.3);
     
-    this.setAngularVelocity(dir*turnSpeed);
+    //this.setAngularVelocity(dir*turnSpeed);
     
   }
   
@@ -98,7 +114,7 @@ export default class Car extends Phaser.Physics.Matter.Sprite {
   }
   
   accelerate(amount) {
-    this.acc=amount;
+    
     if (this.getSpeed() <= this.maxSpeed) {
       this.thrust(this.accSpeed*amount);
     }
@@ -198,8 +214,27 @@ export default class Car extends Phaser.Physics.Matter.Sprite {
     
   }
   
+  setThrottle(throttle) {
+    this.throttle=throttle
+  }
+  
   update(time,delta) {
+    //console.log(JSON.stringify(this.updatedData))
+    if (this.updatedData) {
+      /*
+      //console.log("hupp")
+      const lerpAmt =0.8;
+      const newPos=lerp({x:this.x,y:this.y},this.updatedData,lerpAmt);
+      //console.log(data)
+      this.setPosition(newPos.x,newPos.y);
+      const newRot = rLerp(this.rotation,this.updatedData.rot,0.8);
+      this.setRotation(newRot)
+      this.updatedData=null;
+      */
+    }
     
+    
+    //this.accelerate(this.throttle*delta*0.01/1)
     this.updateRoadPosition();
     
     if (!this.scene.road.contains(this.x,this.y)) {

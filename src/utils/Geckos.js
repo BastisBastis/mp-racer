@@ -52,7 +52,7 @@ global.URL = () => {}
 global.URL.revokeObjectURL = () => {}
 
 // phaser on node variables
-global.phaserOnNodeFPS = 60
+global.phaserOnNodeFPS = 75
 
 } catch (err) {
   console.log(err)

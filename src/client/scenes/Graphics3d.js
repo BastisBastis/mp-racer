@@ -72,6 +72,9 @@ export default class Graphics3d {
     this.scene.add(road)
     this.scene.add(ground);
     this.scene.add(this.player);
+    
+    this.serverUpdates=1;
+    
     this.renderer.render(this.scene, this.camera);
   
   this.renderer.setPixelRatio( window.devicePixelRatio );
@@ -96,40 +99,34 @@ export default class Graphics3d {
     const canvas = this.renderer.domElement;
   this.camera.aspect = canvas.clientWidth / canvas.clientHeight;
   this.camera.updateProjectionMatrix();
-    
+  
+    if (false && this.player.position.x<36)
+        blublu()
     
     const camDist = 50;
-    /*
-    const camX= this.player.position.x+ camDist*Math.cos(Math.PI-this.player.rotation.y + 90*Math.PI/180);
-    const camY= this.player.position.z+ camDist*Math.sin(Math.PI-this.player.rotation.y + 90*Math.PI/180); 
-    */
-    /*
-    const targetRot= Math.PI-this.player.rotation.y + 90*Math.PI/180
-    
-    
-    let dRot = Math.atan2(Math.sin(targetRot-this.cameraRot), Math.cos(targetRot-this.cameraRot));
-    
-    dRot= dRot<0?
-      Math.max(dRot,-this.cameraSpeed) :
-      Math.min(dRot,this.cameraSpeed);
-    
-    this.cameraRot= this.cameraRot+dRot;
-    
-    const camX= this.player.position.x+ camDist*Math.cos(this.cameraRot);
-    const camY= this.player.position.z+ camDist*Math.sin(this.cameraRot); 
-    
-    this.camera.position.z = camY;
-    this.camera.position.x = camX;
-    
-    */
     
     const camGoalX= this.player.position.x+ camDist*Math.cos(Math.PI-this.player.rotation.y + 90*Math.PI/180);
     const camGoalZ= this.player.position.z+ camDist*Math.sin(Math.PI-this.player.rotation.y + 90*Math.PI/180); 
     
-    this.camera.position.lerp(new THREE.Vector3(camGoalX,this.camera.position.y,camGoalZ),0.214)
+    let lerpAmt=0.214//*this.lerpAdjust;
+    if  (this.serverUpdates===2)
+    {
+      lerpAmt = lerpAmt*1.5
+      
+      
+    }
     
-  this.camera.lookAt(new THREE.Vector3( this.player.position.x,this.player.position.y,this.player.position.z ))
-    //console.log(time);
+    //this.lerpAdjust=1;
+    //const lerpAmt=0.4;
+    //lerpAmt=1
+    
+    this.camera.position.lerp(new THREE.Vector3(camGoalX,this.camera.position.y,camGoalZ),lerpAmt)
+    
+    console.log(this.serverUpdates+" "+Math.hypot(camGoalX-this.camera.position.x, camGoalZ-this.camera.position.z))
+    
+    if (true || this.serverUpdates===1)
+      this.camera.lookAt(new THREE.Vector3( this.player.position.x,this.player.position.y,this.player.position.z ))
+    //console.log(timlet
  
     this.renderer.render(this.scene, this.camera);
    
@@ -499,7 +496,8 @@ tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
     return road;
   }
 
-  update(opponents, player,delta) {
+  update(opponents, player,delta,serverUpdates) {
+    this.serverUpdates=serverUpdates;
     //console.log(player.x);
     this.player.position.x = player.x;
     this.player.position.z = player.y;

@@ -10,7 +10,7 @@ export default class UI extends Phaser.Scene {
   
   create(data) {
     
-    
+    this.debugLabel=this.add.text(50,350,"0:00:00", {fontSize:50})
     
     
     this.elapsedTimeLabel=this.add.text(350,70,"0:00:00", {fontSize:50})
@@ -34,6 +34,9 @@ export default class UI extends Phaser.Scene {
     
     EventsCenter.on("showSteering",this.setShowSteering,this);
     EventsCenter.on("adjustSteeringPosition", this.adjustSteeringPosition, this);
+    
+   EventsCenter.on("setDebugLabel", this.setDebugLabel, this); 
+    
     
     this.events.on(Phaser.Scenes.Events.SHUTDOWN, () => {
 		EventsCenter.off("setLapTimeLabel",this.setLapTimeLabel,this);
@@ -78,6 +81,10 @@ export default class UI extends Phaser.Scene {
   setElapsedTimeLabel(time) {
       this.elapsedTimeLabel.text=time;
     }
+    
+  setDebugLabel(text) {
+    this.debugLabel.text=text;
+  }
     
     setLapLabel(text) {
       this.lapLabel.text=text;

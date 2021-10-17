@@ -4,6 +4,8 @@ import MockMatterImage from '../phaserFix/MockMatterImage'
 
 let f=true;
 
+let idCounter=0;
+
 function foot(A, B, P) {
   const AB = {
     x: B.x - A.x,
@@ -29,7 +31,8 @@ export default class Car extends MockMatterImage {  //Phaser.Physics.Matter.Imag
     this.scene=scene;
     
     this.name=name;
-    this.id=id;
+    this.id=idCounter++;
+    this.color=color;
     
     //this.setTint(color);
     //this.setScale(0.125);
@@ -37,11 +40,18 @@ export default class Car extends MockMatterImage {  //Phaser.Physics.Matter.Imag
     
     //this.body = scene.matter.add.rectangle(x,y,16,32)
     
-    this.setSize(16, 32)
-    this.body.position.x-=this.width*0.0625/2
-    this.body.positionPrev.x-=this.width*0.0625/2
+    //this.setSize(16, 32)
+    this.setBody({
+      x:x-this.width*0.0625/2,
+      y:y,
+      width:32,
+      height:16
+    })
+    //this.body.position.x-=this.width*0.0625/2
+    //this.body.positionPrev.x-=this.width*0.0625/2
     
     this.turnAmount=0;
+    this.throttle=0;
     
     this.maxSpeed=5;
     this.accSpeed =0.0015;
@@ -69,9 +79,10 @@ export default class Car extends MockMatterImage {  //Phaser.Physics.Matter.Imag
     this.opponents=[];
     
     this.closestNavPoint;
+    console.log(this.body.mass)
     
     //console.log(this.width)
-    //scene.add.existing(this);
+    scene.add.existing(this);
     
     
   }
@@ -218,6 +229,8 @@ export default class Car extends MockMatterImage {  //Phaser.Physics.Matter.Imag
   }
   
   update(time,delta) {
+    this.accelerate(delta*0.01*this.throttle);
+    //this.throttle=0;
     
     this.updateRoadPosition();
     

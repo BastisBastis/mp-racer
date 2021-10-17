@@ -214,7 +214,8 @@ export default class NPC extends Car {
   autoDrive(time,delta) {
     
     const acc =delta/100*(1-this.reduceAcceleration);
-    this.accelerate(acc);
+    //this.accelerate(acc);
+    this.throttle=1-this.reduceAcceleration;
     this.reduceAcceleration=0;
     
     this.checkBlocking();

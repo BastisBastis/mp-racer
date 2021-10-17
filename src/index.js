@@ -3,7 +3,8 @@ import GameScene from "./client/scenes/GameScene"
 
 import RaceOver from "./client/scenes/RaceOver"
 import UI from "./client/scenes/UI"
-import Menu from "./client/scenes/Menu"
+import Lobby from "./client/scenes/Lobby"
+import socket from 'socket.io-client'
 
 
 const config = {
@@ -25,19 +26,28 @@ const config = {
       matter: {
           debug:false
       }
-  },
+    }, 
+    fps: {
+      target:60,
+      //forceSetTimeOut:true
+    },
     scene: [
-      //Menu,
+      Lobby,
       GameScene,
       RaceOver,
       UI
     ]
 };
+const io = socket.io();
 
+class RaceGame extends Phaser.Game {
+  constructor(config) {
+    super(config);
+    this.io=io;
+  }
+}
 
-
-
-const thisgsme = new Phaser.Game(config);
+const thisgsme = new RaceGame(config);
 
 
 

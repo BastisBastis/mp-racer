@@ -6,23 +6,43 @@ import Phaser from "phaser"
 import * as THREE from "three"
 import Graphics3d from "./Graphics3d"
 import carImg from '../assets/car1.png';
-//import Car from "../objects/Car"
-import NPC from "../objects/NPC"
+import Car from "../objects/Car"
+//import NPC from "../objects/NPC"
 import Controller from "../helpers/Controller"
 import Map from "../objects/Map"
-import Player from "../objects/Player";
+//import Player from "../objects/Player";
 import EventsCenter from "../helpers/EventsCenter"
 
 //const show3d = true;
 
 const lerp= (orig,target, amt) =>{
   try {                                         
-        if (amt > 1.0) {amt = 1.0};
+        //if (amt > 1.0) {amt = 1.0};
         orig.x += (target.x - orig.x) * amt;
         orig.y += (target.y - orig.y) * amt;
         } catch (err) { console.log(err) }
         return orig;
     };
+    
+const rLerp = (A, B, w) =>{
+    let CS = (1-w)*Math.cos(A) + w*Math.cos(B);
+    let SN = (1-w)*Math.sin(A) + w*Math.sin(B);
+    return Math.atan2(SN,CS);
+}
+
+
+function foot(A, B, P) {
+  const AB = {
+    x: B.x - A.x,
+    y: B.y - A.y
+  };
+  const k = ((P.x - A.x) * AB.x + (P.y - A.y) * AB.y) / (AB.x * AB.x + AB.y * AB.y);
+  return {
+    x: A.x + k * AB.x,
+    y: A.y + k * AB.y
+  };
+}
+
 
 export default class Game extends Phaser.Scene {
   constructor () {
@@ -39,9 +59,9 @@ export default class Game extends Phaser.Scene {
     this.demo = data.demo==undefined ? false: data.demo;
   const show3d= data.show3d==undefined ? true: data.show3d;
     
-    const demo=false;
+    
 
-    this.demo=false;
+    //this.demo=true;
     
     
 
@@ -50,18 +70,116 @@ export default class Game extends Phaser.Scene {
     this.matter.world.disableGravity();
 
     
+    this.startTime;
+    this.lapStartTime;
+    this.raceActive=false;
+    this.raceStarted = false;
+
+    this.countdown=5;
+    this.cars=[]
+    
     //Camera Settings
-    if (!show3d)
-      this.cameras.main.setBackgroundColor("#337733")
+    
     
     //this.map = Map.defaultMap(this);
-    const mapIndex = data.mapIndex ||0;
-    this.mapIndex=mapIndex;
-    this.map=Map.mapWithIndex(this,mapIndex);
+    //this.io = socket.io();
+   
+    this.game.io.on("raceData", data=>{
+    
+      try {
+        console.log("raceData")
+        this.setMap(data.mapIndex);
+        
+        //this.addPlayer();
+        
+        
+        this.addCars(data.cars);
+        
+        this.player=this.cars.find(car=>car.id===data.playerId);
+        
+        this.setupCamera(show3d);
+        
+        if (!this.demo) {
+          this.controller= new Controller(this, this.player)
+        }
+        
+    
+        if (this.demo) {
+          this.startRace()
+        } else {
+          this.proceedCountdown();
+        }
+        
+        
+        if (!this.demo) {
+          this.ui = this.scene.launch("UI",{lapCount:this.map.lapCount});
+          }
+        
+        if (show3d) {
+          this.start3d();
+        }
+        
+        this.handleScaling();
+      } catch (err) {
+        alert(err);
+        console.log(err);
+      }
+    })
+    //this.customZoom();
+    
+    this.serverUpdates=0;
+    
+    
+    
+    this.game.io.on("update", data=>{
+      for (const cd of data.carData) {
+        const car = this.cars.find(car=>car.id===cd.id)
+        if (car) {
+          car.setPosition(cd.x,cd.y);
+          car.setRotation(cd.rot)
+        }
+      }
+      /*
+      this.player.setPosition(data.x,data.y);
+      this.player.setRotation(data.rot);
+      */
+      this.serverUpdates++;
+      /*
+      this.player.updatedData=data;
+      
+      let lerpAmt =1//0.9;
+      if (this.serverUpdates>0) {
+        lerpAmt*=1//0.5;
+      }
+      const newPos=lerp({x:this.player.x,y:this.player.y},data,lerpAmt);
+      //console.log(data)
+      this.player.setPosition(newPos.x,newPos.y);
+      const newRot = rLerp(this.player.rotation,data.rot,1);
+      this.player.setRotation(newRot);
+      this.serverUpdates++;
+      
+      //this.player.setVelocity(data.velocity.x+0,data.velocity.y)
+      */
+    })
+    
+    this.game.io.emit("raceLoaded");
+    
+    } catch (err) {
+      alert(err)
+      //console.log(JSON.stringify(err))
+    }
+  }
+  
+  setMap(index) {
+    
+    this.mapIndex=index;
+    this.map=Map.mapWithIndex(this,index);
     
     this.road = this.map.road;
-    
-    const playerName = data.name || "Red";
+  }
+  
+  addPlayer() {
+    const playerName = "Red";
     
     this.player = new Player(this, 0xff0000, 100,230,0,playerName);
     if (this.demo) {
@@ -69,10 +187,18 @@ export default class Game extends Phaser.Scene {
     }
     
     this.map.addCar(this.player);
-    this.opponents = [];
+  }
+  
+  addCars(carData) {
+    this.cars = [];
+    for (const cd of carData) {
+      const car = new Car(this, cd.color, cd.x,cd.y,cd.id,cd.name);
+      this.cars.push(car);
+    }
+    /*
     const opponentColors=[0xffff00, 0x00ff00, 0x0000ff,0xff00ff,0x00ffff];
     const opponentNames=["Yellow","Green","Blue","Purple","Cyan"]
-    for (let i=0; i<0;i++) {
+    for (let i=0; i<n;i++) {
       const car = new NPC(this, opponentColors[i], 0,0,i+1,opponentNames[i])
       this.map.addCar(car);
       this.player.addOpponent(car);
@@ -82,11 +208,12 @@ export default class Game extends Phaser.Scene {
       }
       this.opponents.push(car);
     }
-    
-    if (!this.demo) {
-      this.controller= new Controller(this, this.player)
-    }
-    
+    */
+  }
+  
+  setupCamera(show3d) {
+    if (!show3d)
+      this.cameras.main.setBackgroundColor("#337733")
     if (!show3d && !this.demo) {
       this.cameras.main.startFollow(this.player);
       this.cameras.main.setZoom(1)
@@ -113,58 +240,6 @@ export default class Game extends Phaser.Scene {
     this.cameras.main.scrollX=this.map.bounds.x-156;
     this.cameras.main.scrollY=this.map.bounds.y-h/2;
     this.cameras.main.setViewport(0,0,300,h);
-    }
-    
-    
-    
-    
-    this.startTime;
-    this.lapStartTime;
-    this.raceActive=false;
-    this.raceStarted = false;
-
-    this.countdown=5;
-
-    if (this.demo) {
-      this.startRace()
-    } else {
-      this.proceedCountdown();
-    }
-    
-    
-    this.testLabel=this.add.text(50,300,"", {fontSize:50}).setScrollFactor(0);
-    
-    if (!this.demo) {
-      this.ui = this.scene.launch("UI",{lapCount:this.map.lapCount});
-      }
-    
-    
-    
-    
-    if (show3d) {
-      this.start3d();
-    }
-    
-    this.handleScaling();
-    
-    //this.customZoom();
-    
-    
-    this.io = socket.io();
-    
-    this.io.on("update", data=>{
-      const lerpAmt =0.8;
-      const newPos=lerp({x:this.player.x,y:this.player.y},data,lerpAmt);
-      //console.log(data)
-      this.player.setPosition(newPos.x,newPos.y);
-      const newRot = data.rotation;
-    })
-    
-    
-    
-    } catch (err) {
-      alert(err)
-      //console.log(JSON.stringify(err))
     }
   }
   
@@ -209,7 +284,7 @@ export default class Game extends Phaser.Scene {
     
     
     const oppData=[];
-      for (const opp of this.opponents) {
+      for (const opp of this.cars.filter(car=>car!==this.player)) {
         oppData.push({id:opp.id,color:opp.tintTopLeft})
       }
       try {
@@ -266,10 +341,12 @@ export default class Game extends Phaser.Scene {
     this.raceActive=true;
     this.raceStarted=true;
     this.startTime=this.time.now;
+    /*
     this.player.start(this.startTime);
     for (const opp of this.opponents) {
       opp.start(this.startTime)
     }
+    */
   }
   
   displayLapTime(time) {
@@ -318,8 +395,8 @@ export default class Game extends Phaser.Scene {
   }
   
   showRaceOver(results) {
-    this.scene.stop("UI");
-    this.scene.launch("RaceOver",{results:results,mapIndex:this.mapIndex})
+    //this.scene.stop("UI");
+    //this.scene.launch("RaceOver",{results:results,mapIndex:this.mapIndex})
     
     
   }
@@ -336,12 +413,19 @@ export default class Game extends Phaser.Scene {
   }
 
   update(time,delta) {
+    /*
+    if (this.serverUpdates!=1) {
+      EventsCenter.emit("setDebugLabel", this.serverUpdates)
+    }
+    else {
+      EventsCenter.emit("setDebugLabel", "")
+    }
+    */
     
     
-    //if (this.input.activePointer.x>0) this.finished()()
     if (this.graphics) {
       const oppData=[]
-      for (const opp of this.opponents) {
+      for (const opp of this.cars.filter(car=>car!==this.player)) {
         
         oppData.push({
           id:opp.id,
@@ -359,11 +443,12 @@ export default class Game extends Phaser.Scene {
           rot:this.player.rotation,
           dir:this.player.getMovementDirection(),
           speed:this.player.getSpeed(),
-          turnAmount:this.player.body.angularVelocity
-          },delta)
+          turnAmount:this.player.body.angularVelocity,
+          },delta,this.serverUpdates)
           
     }
     
+    /*
     let raceOver=true;
     for (const car of [this.player, ...this.opponents]) {
       if (!car.finished) {
@@ -373,30 +458,35 @@ export default class Game extends Phaser.Scene {
     if (raceOver) {
       this.finished();
     }
+    */
     
     if (this.raceStarted) {
       if (this.controller && !this.player.finished) {
         this.controller.update(delta)
       }
       //this.player.update(time, delta);
+      /*
       for (const opp of this.opponents) {
         opp.update(time,delta)
       }
+      */
     
-    this.map.update(time, delta);
+    //this.map.update(time, delta);
     }
-    if (this.raceActive) {
+    if (this.raceActive && !this.demo) {
+      
       const totalElapsed = time-this.startTime;
       //this.totalTimeLabel.text=this.msToString(totalElapsed);
       
       EventsCenter.emit("setElapsedTimeLabel",this.msToString(totalElapsed))
       
       //console.log(this.io)
-      this.io.emit("playerUpdate",{turn:this.player.turnAmount,acc:this.player.acc});
+      this.game.io.emit("playerUpdate",{turn:this.player.turnAmount,throttle:this.player.throttle});
       
       //const lapElapsed = time-this.player.lapStartTime;
       //this.lapTimeLabel.text = this.msToString(lapElapsed);
     }
+    this.serverUpdates=0
   }
 }
 
