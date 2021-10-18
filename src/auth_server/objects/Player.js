@@ -3,11 +3,11 @@ import Car from "./Car";
 import NPC from "./NPC"
 
 export default class Player extends NPC {
-    constructor(scene,color,x,y,id,name) {
-        super(scene,color,x,y,id,name);
+    constructor(scene,color,x,y,socketId,name) {
+        super(scene,color,x,y,0,name);
         this.shouldAutoDrive=false;
         this.airFric=0.05;
-
+        this.socketId=socketId;
     }
 
     finishLap(time) {

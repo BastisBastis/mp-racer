@@ -10,7 +10,7 @@ export default class Lobby extends Phaser.Scene {
   create () {
     this.cars=[];
     const names= ["Röd","Gul","Grön","Blå","Lila","Turkos"];
-    const colors= [0xffff00, 0x00ff00, 0x0000ff,0xff00ff,0x00ffff];
+    const colors= [0xff0000,0xffff00, 0x00ff00, 0x0000ff,0xff00ff,0x00ffff];
     names.forEach((name,i) =>{
       this.cars.push({
         name:name,

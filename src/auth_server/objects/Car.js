@@ -114,7 +114,7 @@ export default class Car extends MockMatterImage {  //Phaser.Physics.Matter.Imag
   }
   
   setOpponents(opponents) {
-    this.opponents=opponents;
+    this.opponents=[...opponents];
   }
   
   accelerate(amount) {

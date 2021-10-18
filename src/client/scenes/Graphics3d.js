@@ -122,7 +122,7 @@ export default class Graphics3d {
     
     this.camera.position.lerp(new THREE.Vector3(camGoalX,this.camera.position.y,camGoalZ),lerpAmt)
     
-    console.log(this.serverUpdates+" "+Math.hypot(camGoalX-this.camera.position.x, camGoalZ-this.camera.position.z))
+    //console.log(this.serverUpdates+" "+Math.hypot(camGoalX-this.camera.position.x, camGoalZ-this.camera.position.z))
     
     if (true || this.serverUpdates===1)
       this.camera.lookAt(new THREE.Vector3( this.player.position.x,this.player.position.y,this.player.position.z ))

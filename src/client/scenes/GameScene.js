@@ -59,7 +59,7 @@ export default class Game extends Phaser.Scene {
     this.demo = data.demo==undefined ? false: data.demo;
   const show3d= data.show3d==undefined ? true: data.show3d;
     
-    
+    this.loaded=false;
 
     //this.demo=true;
     
@@ -85,9 +85,12 @@ export default class Game extends Phaser.Scene {
     //this.io = socket.io();
    
     this.game.io.on("raceData", data=>{
-    
+      if (this.loaded) {
+        return false;
+      }
       try {
         console.log("raceData")
+        this.loaded=true;
         this.setMap(data.mapIndex);
         
         //this.addPlayer();
@@ -191,7 +194,9 @@ export default class Game extends Phaser.Scene {
   
   addCars(carData) {
     this.cars = [];
+    //console.log(carData)
     for (const cd of carData) {
+      //console.log(cd)
       const car = new Car(this, cd.color, cd.x,cd.y,cd.id,cd.name);
       this.cars.push(car);
     }

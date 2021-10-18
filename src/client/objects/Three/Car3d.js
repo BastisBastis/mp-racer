@@ -371,7 +371,7 @@ const getWheels=(xScale,zScale)=> {
   const wheelGeometry = new THREE.CylinderGeometry( wheelRadius*zScale, wheelRadius*zScale, wheelHeight*xScale, 16 );
   
   const wheelCapTex = THREE.ImageUtils.loadTexture(WheelPng);
-  console.log(wheelCapTex)
+  //console.log(wheelCapTex)
 //const wheelMaterial = new THREE.MeshPhongMaterial( {color: 0xffff00} );
 const wheelMaterials = [
   new THREE.MeshPhongMaterial( {color: 0x000} ),
@@ -433,7 +433,7 @@ export default class Car3d extends THREE.Mesh {
     
     const boundingBox = new THREE.Box3().setFromObject(this)
     //const size = boundingBox.getSize() 
-    console.log(boundingBox)
+    //console.log(boundingBox)
     const xScale=16/(boundingBox.max.x-boundingBox.min.x);
     const zScale=32/(boundingBox.max.z-boundingBox.min.z);
     const origin= (boundingBox.max.z-boundingBox.min.z)*0.25+boundingBox.min.z;

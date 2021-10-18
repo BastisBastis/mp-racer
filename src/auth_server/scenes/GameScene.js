@@ -20,6 +20,7 @@ export default class Game extends Phaser.Scene {
   }
     
   create (data) {
+    console.log(data)
     
     try {
     
@@ -46,21 +47,46 @@ export default class Game extends Phaser.Scene {
     
     
     
-    const playerName = data.name || "Red";
+    this.players=[];
     
+    this.opponents=[];
     
-    this.player = new Player(this, 0xff0000, 100,230,0,playerName);
+    this.cars=[];
     
+    for (const carData of data.cars) {
+      
+      let newCar;
+      if (carData.player) {
+        newCar = new Player(this, carData.color, 100,230,carData.socketId,carData.name);
+        this.players.push(newCar)
+      } else {
+        newCar = new NPC(this, carData.color, 0,0,0,carData.name)
+        this.opponents.push(newCar)
+      }
+      this.map.addCar(newCar);
+      
+      for (const car of this.cars){
+        car.addOpponent(newCar)
+      }
+      newCar.setOpponents(this.cars)
+      
+      console.log(this.cars.length)
+      this.cars.push(newCar)
+    }
+    console.log("hip")
+    
+    //this.player = new Player(this, 0xff0000, 100,230,0,playerName);
+    
+    /*
     if (this.demo) {
       this.player.shouldAutoDrive=true;
     }
+    */
     
-    this.map.addCar(this.player);
+    //this.map.addCar(this.player);
     
-    this.opponents = [];
+    /*
     
-    const opponentColors=[0xffff00, 0x00ff00, 0x0000ff,0xff00ff,0x00ffff];
-    const opponentNames=["Yellow","Green","Blue","Purple","Cyan"]
     for (let i=0; i<5;i++) {
       const car = new NPC(this, opponentColors[i], 0,0,i+1,opponentNames[i])
       this.map.addCar(car);
@@ -72,7 +98,7 @@ export default class Game extends Phaser.Scene {
       this.opponents.push(car);
     }
     
-    
+    */
     this.startTime;
     this.lapStartTime;
     this.raceActive=false;
@@ -81,7 +107,7 @@ export default class Game extends Phaser.Scene {
     this.countdown=5;
     
     const carData=[];
-      for (const car of [this.player, ...this.opponents]) {
+      for (const car of this.cars) {
         carData.push({
           x:car.x,
           y:car.y,
@@ -92,10 +118,13 @@ export default class Game extends Phaser.Scene {
       }
 
     this.game.sockets.forEach(socket=>{
+      const playerCar = this.cars.find(car=>car.socketId===socket.id);
+      const playerId= playerCar!==undefined ? playerCar.id : -1;
+      
       socket.emit("raceData",{
         mapIndex: this.mapIndex,
         cars:carData,
-        playerId:0
+        playerId:playerId
         });
       
       socket.on("raceLoaded",()=> {
@@ -103,10 +132,10 @@ export default class Game extends Phaser.Scene {
       socket.emit("raceData",{
         mapIndex: this.mapIndex,
         cars:carData,
-        playerId:0
+        playerId:playerId
         });
       })
-        socket.on("playerUpdate",data=>this.playerUpdate(data,this))
+        socket.on("playerUpdate",data=>this.playerUpdate(data,socket.id))
     })
 
     this.game.io.on("connection",socket=>{
@@ -171,8 +200,8 @@ export default class Game extends Phaser.Scene {
     this.raceStarted=true;
     this.startTime=this.time.now;
     //this.player.start(this.startTime);
-    for (const opp of this.opponents) {
-      opp.start(this.startTime)
+    for (const car of this.cars) {
+      car.start(this.startTime)
     }
   }
   
@@ -181,7 +210,7 @@ export default class Game extends Phaser.Scene {
     if (!this.demo) {
       if (this.raceActive){
         
-        const sortedCars=[this.player, ...this.opponents].sort((a,b)=>{
+        const sortedCars=this.cars.sort((a,b)=>{
           
           return a.finishTime-b.finishTime;
         });
@@ -191,7 +220,7 @@ export default class Game extends Phaser.Scene {
             name:car.name,
             lapTimes:car.lapTimes,
             finishTime:car.finishTime,
-            player:car===this.player
+            
             });
         }
         
@@ -210,12 +239,15 @@ export default class Game extends Phaser.Scene {
   }
 
   
-  playerUpdate(data,self) {
-    self.playerUpdates++;
+  playerUpdate(data,socketId) {
+    this.playerUpdates++;
     try {
       //console.log(data);
-      self.player.turn(Number(data.turn));
-      self.player.throttle=Number(data.throttle);
+      const player=this.cars.find(car=>car.socketId===socketId)
+      if (player===undefined)
+        return false;
+      player.turn(Number(data.turn));
+      player.throttle=Number(data.throttle);
     } catch (err) {
       console.log(err);
     }
@@ -243,7 +275,7 @@ export default class Game extends Phaser.Scene {
     
     
     let raceOver=true;
-    for (const car of [this.player, ...this.opponents]) {
+    for (const car of this.cars) {
       if (!car.finished) {
         raceOver=false;
       }
@@ -254,9 +286,9 @@ export default class Game extends Phaser.Scene {
     
     if (this.raceStarted) {
       
-      this.player.update(time, delta);
-      for (const opp of this.opponents) {
-        opp.update(time,delta)
+      //this.player.update(time, delta);
+      for (const car of this.cars) {
+        car.update(time,delta)
       }
     
     this.map.update(time, delta);
@@ -274,7 +306,7 @@ export default class Game extends Phaser.Scene {
     
     //this.game.io.emit("update",JSON.stringify({x:this.player.x,y:this.player.y}));
     const carData=[];
-    for (const car of [this.player, ...this.opponents]) {
+    for (const car of this.cars) {
       carData.push({
         x:car.x,
         y:car.y,
